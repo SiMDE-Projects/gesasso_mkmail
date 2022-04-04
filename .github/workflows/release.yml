@@ -5,6 +5,8 @@ on:
     workflows: [ "Gesasso_MKMail-CI" ]
     branches: [ "master" ]
     types: [ completed ]
+  workflow_dispatch:
+  push:
 
 jobs:
   on-failure:
