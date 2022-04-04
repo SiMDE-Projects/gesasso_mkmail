@@ -2,11 +2,12 @@ name: Create Release
 
 on:
   workflow_run:
-    workflows: [ "Gesasso_MKMail-CI" ]
+    workflows: [ "Build and Test" ]
     branches: [ "master" ]
     types: [ completed ]
   workflow_dispatch:
   push:
+    branches: [ "master" ]
 
 jobs:
   on-failure:
