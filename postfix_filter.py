@@ -40,8 +40,7 @@ def encoded_words_to_text(encoded_words):
     return encoded_words
 
 
-# try:
-if True:
+try:
     b = email.message_from_file(sys.stdin)
     mail_to = str(encoded_words_to_text(b["to"]).encode("utf-8", errors="replace"))
     mail_from = str(encoded_words_to_text(b["from"]).encode("utf-8", errors="replace"))
@@ -78,9 +77,6 @@ if True:
         )
         payload = {"token": encoded}
         r = requests.post(os.environ.get("GESASSO_LISTENER_URL"), data=payload)
-
-try:
-    print("hello")
 except Exception as e:
     syslog.syslog(syslog.LOG_ERR, str(e))
     sys.exit(75)  # EX_TEMPFAIL
