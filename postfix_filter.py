@@ -22,7 +22,10 @@ def extractPayload(mail):
         for payload in mail.get_payload():
             ret += extractPayload(payload)
     elif mail.get_content_type() in ["text/plain", "text/html"]:
-        return mail.get_payload(decode=True).decode("utf-8", errors="ignore")
+        return "\n[{}]\n{}".format(
+            mail.get_content_type(),
+            mail.get_payload(decode=True).decode("utf-8", errors="ignore"),
+        )
     return ret
 
 
