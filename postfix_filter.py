@@ -49,7 +49,9 @@ try:
     print("From: " + mail_from)
     print("To: " + mail_to)
     print("Subject: " + mail_subject)
-    syslog.syslog(f"From: {mail_from} -> To: {mail_to} -> Subject: {mail_subject}")
+    syslog.syslog(
+        "From: {} -> To: {} -> Subject: {}".format(mail_from, mail_to, mail_subject)
+    )
     if "assos.utc.fr" in mail_to and (
         # "simde" in mail_to or
         # "payutc" in mail_to or
