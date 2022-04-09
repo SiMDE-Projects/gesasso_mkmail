@@ -51,7 +51,10 @@ try:
     print("Subject: " + mail_subject)
     syslog.syslog(f"From: {mail_from} -> To: {mail_to} -> Subject: {mail_subject}")
     if "assos.utc.fr" in mail_to and (
-        "simde" in mail_to or "payutc" in mail_to or "zapputc" in mail_to
+        # "simde" in mail_to or
+        # "payutc" in mail_to or
+        "zapputc"
+        in mail_to
     ):
         body = extractPayload(b)
         encoded = jwt.encode(
