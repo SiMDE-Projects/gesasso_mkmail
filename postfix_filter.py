@@ -42,15 +42,19 @@ def encoded_words_to_text(encoded_words):
 
 try:
     b = email.message_from_file(sys.stdin)
-    mail_to = encoded_words_to_text(b["to"])
-    mail_from = encoded_words_to_text(b["from"])
-    mail_subject = encoded_words_to_text(b["subject"])
+    mail_to = encoded_words_to_text(b["to"]).encode("utf-8", errors="ignore")
+    mail_from = encoded_words_to_text(b["from"]).encode("utf-8", errors="ignore")
+    mail_subject = encoded_words_to_text(b["subject"]).encode("utf-8", errors="ignore")
 
-    print("From: " + mail_from)
-    print("To: " + mail_to)
-    print("Subject: " + mail_subject)
+    print("From: " + mail_from.encode("utf-8", errors="ignore"))
+    print("To: " + mail_to.encode("utf-8", errors="ignore"))
+    print("Subject: " + mail_subject.encode("utf-8", errors="ignore"))
     syslog.syslog(
-        "From: {} -> To: {} -> Subject: {}".format(mail_from, mail_to, mail_subject)
+        "From: {} -> To: {} -> Subject: {}".format(
+            mail_from.encode("utf-8", errors="ignore"),
+            mail_to.encode("utf-8", errors="ignore"),
+            mail_subject.encode("utf-8", errors="ignore"),
+        )
     )
     if "assos.utc.fr" in mail_to and (
         # "simde" in mail_to or
