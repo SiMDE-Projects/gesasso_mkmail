@@ -73,7 +73,7 @@ try:
                 "subject": mail_subject,
                 "from": mail_from,
                 "to": mail_to,
-                "body": BeautifulSoup(body, features="html.parser").get_text("\n"),
+                "body": BeautifulSoup(body, features="html.parser").get_text(),
             },
             key=os.environ.get("PRIVATE_KEY"),
             algorithm="RS256",
