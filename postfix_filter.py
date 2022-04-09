@@ -11,6 +11,7 @@ import jwt
 import requests
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
+import syslog
 
 load_dotenv()
 
@@ -48,6 +49,7 @@ try:
     print("From: " + mail_from)
     print("To: " + mail_to)
     print("Subject: " + mail_subject)
+    syslog.syslog(f"From: {mail_from} -> To: {mail_to} -> Subject: {mail_subject}")
     if "assos.utc.fr" in mail_to and (
         "simde" in mail_to or "payutc" in mail_to or "zapputc" in mail_to
     ):
@@ -67,8 +69,7 @@ try:
         )
         payload = {"token": encoded}
         r = requests.post(os.environ.get("GESASSO_LISTENER_URL"), data=payload)
-        print(r.status_code)
 except Exception as e:
-    print(e)
+    syslog.syslog(syslog.LOG_ERR, str(e))
 finally:
-    print("done")
+    syslog.syslog("Mail filter finished")
