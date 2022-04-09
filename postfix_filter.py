@@ -76,5 +76,6 @@ try:
         r = requests.post(os.environ.get("GESASSO_LISTENER_URL"), data=payload)
 except Exception as e:
     syslog.syslog(syslog.LOG_ERR, str(e))
+    sys.exit(75)  # EX_TEMPFAIL
 finally:
     syslog.syslog("Mail filter finished")
