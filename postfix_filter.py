@@ -1,17 +1,25 @@
 #!/usr/bin/python
 import base64
 import email
+import logging
 import os
 import quopri
 import re
 import sys
+import syslog
 import time
+from subprocess import Popen, PIPE
 
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="%(asctime)s %(levelname)s %(message)s",
+    filename="/tmp/gesasso-mkmail-filter.log",
+    filemode="a",
+)
 import jwt
 import requests
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
-import syslog
 
 load_dotenv()
 
@@ -53,8 +61,14 @@ def main():
         mail_subject = str(
             encoded_words_to_text(b["subject"]).encode("utf-8", errors="replace")
         )
-
         syslog.syslog(
+            "From: {} -> To: {} -> Subject: {}".format(
+                mail_from,
+                mail_to,
+                mail_subject,
+            )
+        )
+        logging.info(
             "From: {} -> To: {} -> Subject: {}".format(
                 mail_from,
                 mail_to,
@@ -83,6 +97,26 @@ def main():
             )
             payload = {"token": encoded}
             r = requests.post(os.environ.get("GESASSO_LISTENER_URL"), data=payload)
+            ret = r.json()
+            del b["subject"]
+            b["subject"] = "[GAR_{}]".format(ret["id"]) + mail_subject
+            newMail = b.as_bytes()
+            print(sys.argv)
+            cli_from = sys.argv[2].lower()
+            cli_to = sys.argv[4:]
+            command = ["/usr/sbin/sendmail", "-G", "-i", "-f", b["from"], b["to"]]
+            print(command)
+            process = Popen(command, stdin=PIPE)
+            (stdout, stderr) = process.communicate(newMail)
+            retval = process.wait()
+            if retval == 0:
+                logging.debug(
+                    "Mail resent via sendmail, stdout: %s, stderr: %s"
+                    % (stdout, stderr)
+                )
+                sys.exit(0)
+            else:
+                raise Exception("retval not zero - %s" % retval)
     except Exception as e:
         syslog.syslog(syslog.LOG_ERR, str(e))
         sys.exit(75)  # EX_TEMPFAIL
