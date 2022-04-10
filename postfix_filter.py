@@ -10,18 +10,34 @@ import syslog
 import time
 from subprocess import Popen, PIPE
 
-logging.basicConfig(
-    level=logging.DEBUG,
-    format="%(asctime)s %(levelname)s %(message)s",
-    filename="/tmp/gesasso-mkmail-filter.log",
-    filemode="a",
-)
 import jwt
 import requests
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 
 load_dotenv()
+
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="%(asctime)s %(levelname)s %(message)s",
+    filename="/tmp/gesasso-mkmail-filter.log",
+    filemode="a",
+)
+
+
+def reinjectMail(mail):
+    newMail = mail.as_string()
+    command = ["/usr/sbin/sendmail", "-G", "-i", "-f", mail["from"], mail["to"]]
+    process = Popen(command, stdin=PIPE)
+    (stdout, stderr) = process.communicate(newMail)
+    retval = process.wait()
+    if retval == 0:
+        logging.debug(
+            "Mail resent via sendmail, stdout: %s, stderr: %s" % (stdout, stderr)
+        )
+        sys.exit(0)
+    else:
+        raise Exception("retval not zero - %s" % retval)
 
 
 def extractPayload(mail):
@@ -32,7 +48,7 @@ def extractPayload(mail):
     elif mail.get_content_type() in ["text/plain", "text/html"]:
         return "\n[{}]\n{}\n\n----------".format(
             mail.get_content_type(),
-            mail.get_payload(decode=True),  # .decode("utf-8", errors="replace"),
+            mail.get_payload(decode=True),
         )
     return ret
 
@@ -76,10 +92,7 @@ def main():
             )
         )
         if "assos.utc.fr" in mail_to and (
-            # "simde" in mail_to or
-            # "payutc" in mail_to or
-            "zapputc"
-            in mail_to
+            "simde" in mail_to or "payutc" in mail_to or "zapputc" in mail_to
         ):
             body = extractPayload(b)
             encoded = jwt.encode(
@@ -100,23 +113,7 @@ def main():
             ret = r.json()
             del b["subject"]
             b["subject"] = "[GAR_{}]".format(ret["id"]) + mail_subject
-            newMail = b.as_bytes()
-            print(sys.argv)
-            cli_from = sys.argv[2].lower()
-            cli_to = sys.argv[4:]
-            command = ["/usr/sbin/sendmail", "-G", "-i", "-f", b["from"], b["to"]]
-            print(command)
-            process = Popen(command, stdin=PIPE)
-            (stdout, stderr) = process.communicate(newMail)
-            retval = process.wait()
-            if retval == 0:
-                logging.debug(
-                    "Mail resent via sendmail, stdout: %s, stderr: %s"
-                    % (stdout, stderr)
-                )
-                sys.exit(0)
-            else:
-                raise Exception("retval not zero - %s" % retval)
+        reinjectMail(b)
     except Exception as e:
         syslog.syslog(syslog.LOG_ERR, str(e))
         sys.exit(75)  # EX_TEMPFAIL
