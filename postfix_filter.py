@@ -43,45 +43,52 @@ def encoded_words_to_text(encoded_words):
     return encoded_words
 
 
-try:
-    b = email.message_from_file(sys.stdin)
-    mail_to = str(encoded_words_to_text(b["to"]).encode("utf-8", errors="replace"))
-    mail_from = str(encoded_words_to_text(b["from"]).encode("utf-8", errors="replace"))
-    mail_subject = str(
-        encoded_words_to_text(b["subject"]).encode("utf-8", errors="replace")
-    )
+def main():
+    try:
+        b = email.message_from_file(sys.stdin)
+        mail_to = str(encoded_words_to_text(b["to"]).encode("utf-8", errors="replace"))
+        mail_from = str(
+            encoded_words_to_text(b["from"]).encode("utf-8", errors="replace")
+        )
+        mail_subject = str(
+            encoded_words_to_text(b["subject"]).encode("utf-8", errors="replace")
+        )
 
-    syslog.syslog(
-        "From: {} -> To: {} -> Subject: {}".format(
-            mail_from,
-            mail_to,
-            mail_subject,
+        syslog.syslog(
+            "From: {} -> To: {} -> Subject: {}".format(
+                mail_from,
+                mail_to,
+                mail_subject,
+            )
         )
-    )
-    if "assos.utc.fr" in mail_to and (
-        # "simde" in mail_to or
-        # "payutc" in mail_to or
-        "zapputc"
-        in mail_to
-    ):
-        body = extractPayload(b)
-        encoded = jwt.encode(
-            payload={
-                "iss": "MK_MAIL",
-                "aud": "MK_ULTRA",
-                "iat": int(time.time()),
-                "subject": mail_subject,
-                "from": mail_from,
-                "to": mail_to,
-                "body": BeautifulSoup(body, features="html.parser").get_text(),
-            },
-            key=os.environ.get("PRIVATE_KEY"),
-            algorithm="RS256",
-        )
-        payload = {"token": encoded}
-        r = requests.post(os.environ.get("GESASSO_LISTENER_URL"), data=payload)
-except Exception as e:
-    syslog.syslog(syslog.LOG_ERR, str(e))
-    sys.exit(75)  # EX_TEMPFAIL
-finally:
-    syslog.syslog("Mail filter finished")
+        if "assos.utc.fr" in mail_to and (
+            # "simde" in mail_to or
+            # "payutc" in mail_to or
+            "zapputc"
+            in mail_to
+        ):
+            body = extractPayload(b)
+            encoded = jwt.encode(
+                payload={
+                    "iss": "MK_MAIL",
+                    "aud": "MK_ULTRA",
+                    "iat": int(time.time()),
+                    "subject": mail_subject,
+                    "from": mail_from,
+                    "to": mail_to,
+                    "body": BeautifulSoup(body, features="html.parser").get_text(),
+                },
+                key=os.environ.get("PRIVATE_KEY"),
+                algorithm="RS256",
+            )
+            payload = {"token": encoded}
+            r = requests.post(os.environ.get("GESASSO_LISTENER_URL"), data=payload)
+    except Exception as e:
+        syslog.syslog(syslog.LOG_ERR, str(e))
+        sys.exit(75)  # EX_TEMPFAIL
+    finally:
+        syslog.syslog("Mail filter finished")
+
+
+if __name__ == "__main__":
+    main()
