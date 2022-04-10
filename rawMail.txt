@@ -1,0 +1,180 @@
+Return-Path: <simde@assos.utc.fr>
+X-Original-To: zapputc@assos.utc.fr
+Delivered-To: zapputc@assos.utc.fr
+Received: from mxo.utc.fr (mxo-out5.utc.fr [195.83.155.132])
+	by mail.mde.utc (Postfix) with ESMTP id 0C29F7FDF5
+	for <zapputc@assos.utc.fr>; Sun, 10 Apr 2022 19:53:24 +0200 (CEST)
+Received: from vmc.utc.fr (vmc.utc.fr [195.83.155.12])
+	by mxo.utc.fr (Postfix) with ESMTP id 00F7B56966
+	for <zapputc@assos.utc.fr>; Sun, 10 Apr 2022 19:53:23 +0200 (CEST)
+Received: from mxo.utc.fr (mxo.utc.fr [195.83.155.6])
+	by vmc.utc.fr (vmc.utc.fr) with ESMTP id DB30855D9B
+	for <zapputc@assos.utc.fr>; Sun, 10 Apr 2022 19:53:23 +0200 (CEST)
+Received: from mxo.utc.fr (localhost [127.0.0.1])
+	by mxo.utc.fr (Postfix) with ESMTP id E2CCC56966
+	for <zapputc@assos.utc.fr>; Sun, 10 Apr 2022 19:53:23 +0200 (CEST)
+Received: from smtps.utc.fr (smtps.utc.fr [195.83.155.8])
+	by mxo.utc.fr (Postfix) with ESMTP id E16CEA0FE6
+	for <zapputc@assos.utc.fr>; Sun, 10 Apr 2022 19:53:23 +0200 (CEST)
+Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: cerichar@smtps.utc.fr)
+	by smtps.utc.fr (Postfix) with ESMTPSA id DBB0A13FEA4
+	for <zapputc@assos.utc.fr>; Sun, 10 Apr 2022 19:53:23 +0200 (CEST)
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-deb9295679so14947521fac.6
+        for <zapputc@assos.utc.fr>; Sun, 10 Apr 2022 10:53:23 -0700 (PDT)
+X-Gm-Message-State: AOAM532HYMBmCKzy/TllZhmEcV/bIepGuCngnc+BjGZmSqwRiOzn8pBe
+	6gWIumUtaxVkrueSC/4pRN89lhaXqXhy3d2Buww=
+X-Google-Smtp-Source: ABdhPJzhXV+vSOCZs7fd/Nh75bpDwtZYoV+VF9seiEst/qqgP9HlpCtcXeKnqHBGnGf3hspqE28IM2xJ6yWFo/HPuw0=
+X-Received: by 2002:a05:6870:c141:b0:e2:9512:de42 with SMTP id
+ g1-20020a056870c14100b000e29512de42mr4678351oad.288.1649613202581; Sun, 10
+ Apr 2022 10:53:22 -0700 (PDT)
+MIME-Version: 1.0
+References: <CAAuEUXaxCZXBpmq_7bU1aAFiB3k9SMzibRpHckY+Dg4VCcUAqw@mail.gmail.com>
+In-Reply-To: <CAAuEUXaxCZXBpmq_7bU1aAFiB3k9SMzibRpHckY+Dg4VCcUAqw@mail.gmail.com>
+From: =?UTF-8?Q?C=C3=A9sar_Richard_=2D_SiMDE?= <simde@assos.utc.fr>
+Date: Sun, 10 Apr 2022 19:53:11 +0200
+X-Gmail-Original-Message-ID: <CA+4A_53+MmHzCLr49KYNdvO0w1-wf=Tyt1+C8=WFhf3WpuO2ow@mail.gmail.com>
+Message-ID: <CA+4A_53+MmHzCLr49KYNdvO0w1-wf=Tyt1+C8=WFhf3WpuO2ow@mail.gmail.com>
+Subject: =?UTF-8?Q?Fwd=3A_acc=C3=A8s_vente_woolly_ESN?=
+To: zapputc@assos.utc.fr
+Content-Type: multipart/alternative; boundary="000000000000f4ecff05dc508089"
+X-DRWEB-SCAN: disabled
+X-CLAMAV-SCAN: ok
+X-VRSPAM-SCORE: 0
+X-VRSPAM-STATE: legit
+X-VRSPAM-CAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudekgedgudduiecutefuodetggdotefrucfrrhhofhhilhgvmecuggetfffgifetvffghgetjgdpggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedttdenucenucfjughrpeggfhgjhfffkffuvfgtsegrtderredttdejnecuhfhrohhmpeevrohsrghrpgftihgthhgrrhgupgdqpgfuihfofffguceoshhimhguvgesrghsshhoshdruhhttgdrfhhrqeenucggtffrrghtthgvrhhnpeduleevffeukeeggffhjefgudehueejtdfglefftdefveefteehudeiffetuefgleenucffohhmrghinhepfhgrtggvsghoohhkrdgtohhmpdhuthgtrdhfrhdpmhgrihhlthhrrggtkhdrihhonecukfhppeduleehrdekfedrudehhedriedpvddtledrkeehrdduiedtrdehtdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdpihhnvghtpeduleehrdekfedrudehhedriedphhgvlhhopehmgihordhuthgtrdhfrhdpmhgrihhlfhhrohhmpehsihhmuggvsegrshhsohhsrdhuthgtrdhfrhdpnhgspghrtghpthhtohepuddprhgtphhtthhopeiirghpphhuthgtsegrshhsohhsrdhuthgtrdhfrh
+
+--000000000000f4ecff05dc508089
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+---------- Forwarded message ---------
+De : Esperanto UTC <esperanto@assos.utc.fr>
+Date: lun. 28 mars 2022 =C3=A0 11:51
+Subject: acc=C3=A8s vente woolly ESN
+To: payutc <payutc@assos.utc.fr>
+
+
+Bonjour,
+pourrions nous avoir acc=C3=A8s "en direct" =C3=A0 la vente en cours sur wo=
+olly pour
+le week-end ESN?
+Merci d'avance
+Simon de Preaumont pour la team week-end
+---------------------------------------------------------------------------=
+---------------------------
+
+
+ESN Esp=C3=A9ranto Compi=C3=A8gne https://www.facebook.com/esn.compiegne
+
+Universit=C3=A9 de Technologie de Compi=C3=A8gne http://www.utc.fr
+
+email : esperanto@assos.utc.fr <esperanto-secretariat@assos.utc.fr>
+
+---------------------------------------------------------------------------=
+---------------------------
+Merci de penser =C3=A0 l'environnement et aux co=C3=BBts avant d'imprimer c=
+et e-mail
+---------------------------------------------------------------------------=
+---------------------------
+
+[image: Mailtrack]
+<https://mailtrack.io?utm_source=3Dgmail&utm_medium=3Dsignature&utm_campaig=
+n=3Dsignaturevirality11&>
+Sender
+notified by
+Mailtrack
+<https://mailtrack.io?utm_source=3Dgmail&utm_medium=3Dsignature&utm_campaig=
+n=3Dsignaturevirality11&>
+10/04/22,
+19:52:53
+
+--000000000000f4ecff05dc508089
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><br><br><img width=3D"0" height=3D"0" class=3D"mailtrack-i=
+mg" alt=3D"" style=3D"display:flex" src=3D"https://mailtrack.io/trace/mail/=
+d066e32021c6b01964a8f7719edd1bfa3e528e66.png?u=3D6244272"><div class=3D"gma=
+il_quote"><div dir=3D"ltr" class=3D"gmail_attr">---------- Forwarded messag=
+e ---------<br>De=C2=A0: <strong class=3D"gmail_sendername" dir=3D"auto">Es=
+peranto UTC</strong> <span dir=3D"auto">&lt;<a href=3D"mailto:esperanto@ass=
+os.utc.fr">esperanto@assos.utc.fr</a>&gt;</span><br>Date: lun. 28 mars 2022=
+ =C3=A0=C2=A011:51<br>Subject: acc=C3=A8s vente woolly ESN<br>To: payutc &l=
+t;<a href=3D"mailto:payutc@assos.utc.fr">payutc@assos.utc.fr</a>&gt;<br></d=
+iv><br><br><div dir=3D"ltr"><div style=3D"font-family:arial,helvetica,sans-=
+serif;font-size:small">Bonjour,=C2=A0</div><div style=3D"font-family:arial,=
+helvetica,sans-serif;font-size:small">pourrions nous avoir acc=C3=A8s &quot=
+;en direct&quot; =C3=A0 la vente en cours sur woolly pour le week-end ESN?<=
+/div><div style=3D"font-family:arial,helvetica,sans-serif;font-size:small">=
+Merci d&#39;avance</div><div style=3D"font-family:arial,helvetica,sans-seri=
+f;font-size:small">Simon de Preaumont pour la team week-end</div><div><div =
+dir=3D"ltr" data-smartmail=3D"gmail_signature"><div dir=3D"ltr"><div dir=3D=
+"ltr"><div dir=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr"><=
+div dir=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr"><div dir=
+=3D"ltr"><span style=3D"font-size:small;font-family:arial"><span style=3D"f=
+ont-size:9pt">-------------------------------------------------------------=
+-----------------------------------------=C2=A0</span></span><p style=3D"fo=
+nt-size:small;font-family:arial;background-image:none;background-repeat:rep=
+eat repeat"><img src=3D"https://docs.google.com/uc?export=3Ddownload&amp;id=
+=3D1IT_L2tgDObL7bd_ioBPdQNNFVQPcMcge&amp;revid=3D0B0Q6BHdGlVRZVmEyWU1ibmM2c=
+DNIRmRXYlU3ZmVLdmFwcWlzPQ" width=3D"200" height=3D"200"><br></p><p style=3D=
+"font-size:small;font-family:arial;background-image:none;background-repeat:=
+repeat repeat"><span style=3D"font-size:9pt">ESN Esp=C3=A9ranto Compi=C3=A8=
+gne <a href=3D"https://www.facebook.com/esn.compiegne" target=3D"_blank">ht=
+tps://www.facebook.com/esn.compiegne</a><span style=3D"background-color:rgb=
+(255,255,255)"></span></span></p><p style=3D"font-size:small;font-family:ar=
+ial;background-image:none;background-repeat:repeat repeat"><span style=3D"f=
+ont-size:9pt">Univ</span><span style=3D"font-size:9pt">ersit=C3=A9 de Techn=
+ologi</span><span style=3D"font-size:9pt">e de Compi=C3=A8gne=C2=A0</span><=
+span style=3D"font-size:9pt"><a href=3D"http://www.utc.fr/" style=3D"color:=
+rgb(17,85,204)" target=3D"_blank">http://www.utc.fr</a></span></p><p style=
+=3D"font-size:small;font-family:arial;background-image:none;background-repe=
+at:repeat repeat"><span style=3D"font-size:9pt">email :=C2=A0</span><a href=
+=3D"mailto:esperanto-secretariat@assos.utc.fr" style=3D"font-size:9pt;color=
+:rgb(17,85,204)" target=3D"_blank">esperanto@assos.utc.fr</a></p><p style=
+=3D"font-size:small;font-family:arial;background-image:none;background-repe=
+at:repeat repeat"><span style=3D"font-size:12.2222px">---------------------=
+---------------------------------------------------------------------------=
+------=C2=A0</span><span style=3D"font-size:9pt"><br>Merci de penser =C3=A0=
+ l&#39;environnement et aux co=C3=BBts avant d&#39;imprimer cet e-mail<br><=
+/span><span style=3D"font-size:12.2222px">---------------------------------=
+---------------------------------------------------------------------=C2=A0=
+</span></p></div></div></div></div></div></div></div></div></div></div></di=
+v></div></div></div>
+</div><br><div id=3D"mt-signature">
+        <table border=3D"0" cellpadding=3D"8" cellspacing=3D"0" style=3D"us=
+er-select: none;">
+            <tbody><tr>
+                <td>
+                    <a id=3D"signatureLink-logo" href=3D"https://mailtrack.=
+io?utm_source=3Dgmail&amp;utm_medium=3Dsignature&amp;utm_campaign=3Dsignatu=
+revirality11&amp;" class=3D"" style=3D"text-decoration:none">
+                        <img src=3D"https://s3.amazonaws.com/mailtrack-sign=
+ature/sender-notified-72.gif" alt=3D"Mailtrack" class=3D"" width=3D"32" hei=
+ght=3D"32">
+                    </a>
+                </td>
+                <td>
+                    <span style=3D"color:#777">Sender notified by</span> <b=
+r>
+                    <a id=3D"signatureLink-text" href=3D"https://mailtrack.=
+io?utm_source=3Dgmail&amp;utm_medium=3Dsignature&amp;utm_campaign=3Dsignatu=
+revirality11&amp;" class=3D"mt-install" style=3D"color:#4374f7">Mailtrack</=
+a>
+                   =20
+    </td><td><span style=3D"color:transparent;font-size:0">10/04/22, 19:52:=
+53</span></td>
+
+               =20
+                <td>
+                   =20
+                </td>
+            </tr>
+        </tbody></table>
+    </div></div>
+
+--000000000000f4ecff05dc508089--

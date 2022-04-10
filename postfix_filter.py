@@ -1,19 +1,43 @@
 #!/usr/bin/python
 import base64
 import email
+import logging
 import os
 import quopri
 import re
 import sys
+import syslog
 import time
+from subprocess import Popen, PIPE
 
 import jwt
 import requests
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
-import syslog
 
 load_dotenv()
+
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="%(asctime)s %(levelname)s %(message)s",
+    filename="/tmp/gesasso-mkmail-filter.log",
+    filemode="a",
+)
+
+
+def reinjectMail(mail):
+    newMail = mail.as_string()
+    command = ["/usr/sbin/sendmail", "-G", "-i", "-f", mail["from"], mail["to"]]
+    process = Popen(command, stdin=PIPE)
+    (stdout, stderr) = process.communicate(newMail)
+    retval = process.wait()
+    if retval == 0:
+        logging.debug(
+            "Mail resent via sendmail, stdout: %s, stderr: %s" % (stdout, stderr)
+        )
+        sys.exit(0)
+    else:
+        raise Exception("retval not zero - %s" % retval)
 
 
 def extractPayload(mail):
@@ -24,7 +48,7 @@ def extractPayload(mail):
     elif mail.get_content_type() in ["text/plain", "text/html"]:
         return "\n[{}]\n{}\n\n----------".format(
             mail.get_content_type(),
-            mail.get_payload(decode=True),  # .decode("utf-8", errors="replace"),
+            mail.get_payload(decode=True),
         )
     return ret
 
@@ -53,7 +77,6 @@ def main():
         mail_subject = str(
             encoded_words_to_text(b["subject"]).encode("utf-8", errors="replace")
         )
-
         syslog.syslog(
             "From: {} -> To: {} -> Subject: {}".format(
                 mail_from,
@@ -61,11 +84,15 @@ def main():
                 mail_subject,
             )
         )
+        logging.info(
+            "From: {} -> To: {} -> Subject: {}".format(
+                mail_from,
+                mail_to,
+                mail_subject,
+            )
+        )
         if "assos.utc.fr" in mail_to and (
-            # "simde" in mail_to or
-            # "payutc" in mail_to or
-            "zapputc"
-            in mail_to
+            "simde" in mail_to or "payutc" in mail_to or "zapputc" in mail_to
         ):
             body = extractPayload(b)
             encoded = jwt.encode(
@@ -83,6 +110,10 @@ def main():
             )
             payload = {"token": encoded}
             r = requests.post(os.environ.get("GESASSO_LISTENER_URL"), data=payload)
+            ret = r.json()
+            del b["subject"]
+            b["subject"] = "[GAR_{}]".format(ret["id"]) + mail_subject
+        reinjectMail(b)
     except Exception as e:
         syslog.syslog(syslog.LOG_ERR, str(e))
         sys.exit(75)  # EX_TEMPFAIL
