@@ -2,3 +2,8 @@
 venv
 .env
 output.txt
+pytest_cache
+.vscode
+docker-data/dms/mail*
+#^docker-data/dms/config/postfix-master.cf
+/docker-data/dms/config/

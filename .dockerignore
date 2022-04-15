@@ -1,0 +1,9 @@
+venv
+.pytest_cache
+.github
+pytest_cache
+.vscode
+Dockerfile
+docker-compose.yml
+.gitignore
+.dockerignore

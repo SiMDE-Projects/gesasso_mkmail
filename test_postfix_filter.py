@@ -11,7 +11,6 @@ from postfix_filter import encoded_words_to_text
             "César_Richard <cesar.richard2@gmail.com>",
         ),
         ("cesar.richard2@gmail.com", "cesar.richard2@gmail.com"),
-        ("cesar.richard2@gmail.com", "cesar.richard2@gmail.com"),
         ("Bob Dylan <bob.dylan@etu.utc.fr>", "Bob Dylan <bob.dylan@etu.utc.fr>"),
         ("=?utf-8?Q?=C3=A9?=", "é"),
     ],
