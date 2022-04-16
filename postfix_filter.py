@@ -48,7 +48,7 @@ def extractPayload(mail):
     elif mail.get_content_type() in ["text/plain", "text/html"]:
         return "\n[{}]\n{}\n\n----------".format(
             mail.get_content_type(),
-            mail.get_payload(decode=True),
+            mail.get_payload(decode=True).decode("utf-8", errors="replace"),
         )
     return ret
 
@@ -70,13 +70,22 @@ def encoded_words_to_text(encoded_words):
 def main():
     try:
         b = email.message_from_file(sys.stdin)
-        mail_to = str(encoded_words_to_text(b["to"]).encode("utf-8", errors="replace"))
-        mail_from = str(
-            encoded_words_to_text(b["from"]).encode("utf-8", errors="replace")
+        mail_to = (
+            encoded_words_to_text(b["to"])
+            .encode("utf-8", errors="replace")
+            .decode("utf-8")
         )
-        mail_subject = str(
-            encoded_words_to_text(b["subject"]).encode("utf-8", errors="replace")
+        mail_from = (
+            encoded_words_to_text(b["from"])
+            .encode("utf-8", errors="replace")
+            .decode("utf-8")
         )
+        mail_subject = (
+            encoded_words_to_text(b["subject"])
+            .encode("utf-8", errors="replace")
+            .decode("utf-8")
+        )
+
         syslog.syslog(
             "From: {} -> To: {} -> Subject: {}".format(
                 mail_from,
@@ -92,7 +101,7 @@ def main():
             )
         )
         if "assos.utc.fr" in mail_to and (
-            "simde" in mail_to or "payutc" in mail_to or "zapputc" in mail_to
+            "simde" in mail_to or "payutc" in mail_to or "cesar" in mail_to
         ):
             body = extractPayload(b)
             encoded = jwt.encode(
@@ -117,6 +126,7 @@ def main():
         reinjectMail(b)
     except Exception as e:
         syslog.syslog(syslog.LOG_ERR, str(e))
+        print(str(e), file=sys.stderr)
         sys.exit(75)  # EX_TEMPFAIL
     finally:
         syslog.syslog("Mail filter finished")
