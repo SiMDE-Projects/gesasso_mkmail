@@ -26,7 +26,7 @@ logging.basicConfig(
 
 
 def reinjectMail(mail):
-    newMail = mail.as_string()
+    newMail = mail.as_bytes()
     command = ["/usr/sbin/sendmail", "-G", "-i", "-f", mail["from"], mail["to"]]
     process = Popen(command, stdin=PIPE)
     (stdout, stderr) = process.communicate(newMail)
@@ -111,8 +111,9 @@ def main():
             payload = {"token": encoded}
             r = requests.post(os.environ.get("GESASSO_LISTENER_URL"), data=payload)
             ret = r.json()
-            del b["subject"]
-            b["subject"] = "[GAR_{}]".format(ret["id"]) + mail_subject
+            if "[GAR_{}]".format(ret["id"]) not in mail_subject:
+                del b["subject"]
+                b["subject"] = "[GAR_{}]".format(ret["id"]) + mail_subject
         reinjectMail(b)
     except Exception as e:
         syslog.syslog(syslog.LOG_ERR, str(e))

@@ -16,12 +16,10 @@ services:
       - "587:587"  # ESMTP (explicit TLS => STARTTLS)
       - "993:993"  # IMAP4 (implicit TLS)
     volumes:
-      - ./docker-data/dms/mail-data/:/var/mail/
-      - ./docker-data/dms/mail-state/:/var/mail-state/
-      - ./docker-data/dms/mail-logs/:/var/log/mail/
-      - ./docker-data/dms/config/:/tmp/docker-mailserver/
-      - /etc/localtime:/etc/localtime:ro
-      - ./config/:/tmp/docker-mailserver/
+#      - ./docker-data/dms/mail-data/:/var/mail/
+#      - ./docker-data/dms/mail-state/:/var/mail-state/
+#      - ./docker-data/dms/mail-logs/:/var/log/mail/
+#      - /etc/localtime:/etc/localtime:ro
       - .:/srv/gesasso_mkmail/
     cap_add:
       - NET_ADMIN
