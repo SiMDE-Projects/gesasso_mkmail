@@ -1,11 +1,13 @@
 services:
   server:
-    build: ""
+    build:
+      context: ./
+      dockerfile: ./docker/Dockerfile
     # If the FQDN for your mail-server is only two labels (eg: example.com),
     # you can assign this entirely to `hostname` and remove `domainname`.
     hostname: mail.mde.utc
     domainname: assos.utc.fr
-    env_file: mailserver.env
+    env_file: docker/mailserver.env
     # More information about the mail-server ports:
     # https://docker-mailserver.github.io/docker-mailserver/edge/config/security/understanding-the-ports/
     # To avoid conflicts with yaml base-60 float, DO NOT remove the quotation marks.
@@ -16,9 +18,9 @@ services:
       - "587:587"  # ESMTP (explicit TLS => STARTTLS)
       - "993:993"  # IMAP4 (implicit TLS)
     volumes:
-#      - ./docker-data/dms/mail-data/:/var/mail/
-#      - ./docker-data/dms/mail-state/:/var/mail-state/
-#      - ./docker-data/dms/mail-logs/:/var/log/mail/
+      - ./docker/docker-data/dms/mail-data/:/var/mail/
+#      - ./docker/docker-data/dms/mail-state/:/var/mail-state/
+#      - ./docker/docker-data/dms/mail-logs/:/var/log/mail/
 #      - /etc/localtime:/etc/localtime:ro
       - .:/srv/gesasso_mkmail/
     cap_add:
