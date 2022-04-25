@@ -47,6 +47,6 @@ def test_encoded_words_to_text(encoded, decoded):
         ("woolly@assos.utc.fr", True, True),
     ],
 )
-def test_encoded_words_to_text(mail: str, force_handle_env: bool, result: bool):
+def test_is_simde_email(mail: str, force_handle_env: bool, result: bool):
     os.environ["HANDLE_ALL_MAILS"] = "True" if force_handle_env else "False"
     assert is_simde_email(mail) == result

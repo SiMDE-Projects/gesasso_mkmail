@@ -67,7 +67,7 @@ def encoded_words_to_text(encoded_words):
         elif encoding == "Q":
             byte_string = quopri.decodestring(encoded_text)
         return byte_string.decode(charset) + next
-    return encoded_words
+    return encoded_words.encode("utf-8", errors="replace").decode("utf-8")
 
 
 def is_simde_email(mail):
@@ -83,30 +83,11 @@ def is_simde_email(mail):
 def main():
     try:
         b = email.message_from_file(sys.stdin)
-        mail_to = (
-            encoded_words_to_text(b["to"])
-            .encode("utf-8", errors="replace")
-            .decode("utf-8")
-        )
-        mail_from = (
-            encoded_words_to_text(b["from"])
-            .encode("utf-8", errors="replace")
-            .decode("utf-8")
-        )
-        mail_subject = (
-            encoded_words_to_text(b["subject"])
-            .encode("utf-8", errors="replace")
-            .decode("utf-8")
-        )
+        mail_to = encoded_words_to_text(b["to"])
+        mail_from = encoded_words_to_text(b["from"])
+        mail_subject = encoded_words_to_text(b["subject"])
 
         syslog.syslog(
-            "From: {} -> To: {} -> Subject: {}".format(
-                mail_from,
-                mail_to,
-                mail_subject,
-            )
-        )
-        logging.info(
             "From: {} -> To: {} -> Subject: {}".format(
                 mail_from,
                 mail_to,
