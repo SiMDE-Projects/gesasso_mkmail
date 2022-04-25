@@ -40,16 +40,19 @@ def reinjectMail(mail):
         raise Exception("retval not zero - %s" % retval)
 
 
-def extractPayload(mail):
-    ret = ""
+def extractMultipartPayload(mail):
+    ret = {"text": "", "attachements": []}
     if mail.is_multipart():
         for payload in mail.get_payload():
-            ret += extractPayload(payload)
+            ret["text"] += extractMultipartPayload(payload)["text"]
+            ret["attachements"].append(extractMultipartPayload(payload)["attachements"])
     elif mail.get_content_type() in ["text/plain", "text/html"]:
-        return "\n[{}]\n{}\n\n----------".format(
-            mail.get_content_type(),
-            mail.get_payload(decode=True).decode("utf-8", errors="replace"),
-        )
+        content = mail.get_payload(decode=True).decode("utf-8", errors="replace")
+        # if mail.get_content_type() == "text/html":
+        #     content = BeautifulSoup(content, features="html.parser").decompose()
+        ret["text"] += content
+    else:
+        ret["attachements"].append(mail.get_payload(decode=True))
     return ret
 
 
@@ -65,6 +68,16 @@ def encoded_words_to_text(encoded_words):
             byte_string = quopri.decodestring(encoded_text)
         return byte_string.decode(charset) + next
     return encoded_words
+
+
+def is_simde_email(mail):
+    if os.environ.get("HANDLE_ALL_MAILS", "False").lower() in ("true", "1", "t"):
+        return True
+    return "assos.utc.fr" in mail and (
+        mail.startswith("simde")
+        or mail.startswith("payutc")
+        or mail.startswith("woolly")
+    )
 
 
 def main():
@@ -100,10 +113,8 @@ def main():
                 mail_subject,
             )
         )
-        if "assos.utc.fr" in mail_to and (
-            "simde" in mail_to or "payutc" in mail_to or "cesar" in mail_to
-        ):
-            body = extractPayload(b)
+        if is_simde_email(mail_to):
+            body = extractMultipartPayload(b)
             encoded = jwt.encode(
                 payload={
                     "iss": "MK_MAIL",
@@ -112,7 +123,10 @@ def main():
                     "subject": mail_subject,
                     "from": mail_from,
                     "to": mail_to,
-                    "body": BeautifulSoup(body, features="html.parser").get_text(),
+                    "body": BeautifulSoup(
+                        body["text"], features="html.parser"
+                    ).get_text(),
+                    # "attachements": body["attachements"],
                 },
                 key=os.environ.get("PRIVATE_KEY"),
                 algorithm="RS256",
