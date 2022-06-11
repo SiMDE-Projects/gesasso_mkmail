@@ -1,5 +1,6 @@
+version: "3.9"
 services:
-  server:
+  mailserver:
     build:
       context: ./
       dockerfile: ./docker/Dockerfile
@@ -26,3 +27,6 @@ services:
     cap_add:
       - NET_ADMIN
       - SYS_PTRACE
+networks:
+  default:
+    name: external-example
