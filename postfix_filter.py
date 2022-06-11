@@ -1,28 +1,33 @@
 #!/usr/bin/python3
-import base64
-import email
-import logging
-import os
-import quopri
-import re
-import sys
-import syslog
-import time
-from subprocess import Popen, PIPE
+try:
+    import base64
+    import email
+    import logging
+    import os
+    import quopri
+    import re
+    import sys
+    import syslog
+    import time
+    from subprocess import Popen, PIPE
 
-import jwt
-import requests
-from bs4 import BeautifulSoup
-from dotenv import load_dotenv
+    import jwt
+    import requests
+    from bs4 import BeautifulSoup
+    from dotenv import load_dotenv
 
-load_dotenv()
+    load_dotenv()
 
-logging.basicConfig(
-    level=logging.DEBUG,
-    format="%(asctime)s %(levelname)s %(message)s",
-    filename="/tmp/gesasso-mkmail-filter.log",
-    filemode="a",
-)
+    logging.basicConfig(
+        level=logging.DEBUG,
+        format="%(asctime)s %(levelname)s %(message)s",
+        filename="/tmp/gesasso-mkmail-filter.log",
+        filemode="a",
+    )
+except Exception as e:
+    syslog.syslog(syslog.LOG_ERR, str(e))
+    print(str(e), file=sys.stderr)
+    sys.exit(75)  # EX_TEMPFAIL
 
 
 def reinjectMail(mail):
