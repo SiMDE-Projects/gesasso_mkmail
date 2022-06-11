@@ -103,7 +103,7 @@ def main():
                 mail_subject,
             )
         )
-        if is_simde_email(mail_to):
+        if is_simde_email(mail_to) and not mail_from.startswith("gesasso"):
             body = extractMultipartPayload(b)
             encoded = jwt.encode(
                 payload={
