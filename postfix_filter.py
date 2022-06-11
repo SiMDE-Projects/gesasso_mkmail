@@ -49,15 +49,19 @@ def extractMultipartPayload(mail):
     ret = {"text": "", "attachements": []}
     if mail.is_multipart():
         for payload in mail.get_payload():
-            ret["text"] += extractMultipartPayload(payload)["text"]
-            ret["attachements"].append(extractMultipartPayload(payload)["attachements"])
+            extracted = extractMultipartPayload(payload)
+            ret["text"] += extracted["text"]
+            ret["attachements"].extend(extracted["attachements"])
     elif mail.get_content_type() in ["text/plain", "text/html"]:
         content = mail.get_payload(decode=True).decode("utf-8", errors="replace")
-        # if mail.get_content_type() == "text/html":
-        #     content = BeautifulSoup(content, features="html.parser").decompose()
         ret["text"] += content
     else:
-        ret["attachements"].append(mail.get_payload(decode=True))
+        attachement = {
+            "name": mail.get_filename(),
+            "content": mail.get_payload(),
+            "type": mail.get_content_type(),
+        }
+        ret["attachements"].append(attachement)
     return ret
 
 
@@ -112,7 +116,7 @@ def main():
                     "body": BeautifulSoup(
                         body["text"], features="html.parser"
                     ).get_text(),
-                    # "attachements": body["attachements"],
+                    "attachements": body["attachements"],
                 },
                 key=os.environ.get("PRIVATE_KEY"),
                 algorithm="RS256",
