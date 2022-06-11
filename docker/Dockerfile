@@ -14,4 +14,5 @@ ADD ./docker/config/postfix-aliases.cf /tmp/docker-mailserver/
 ADD ./docker/config/postfix-master.cf /tmp/docker-mailserver/
 ADD ./docker/config/postfix-virtual.cf /tmp/docker-mailserver/
 ADD ./docker/config/master.cf /etc/postfix/master.cf
-ADD . /srv/gesasso_mkmail/
+ADD ./test_postfix_filter.py /srv/gesasso_mkmail/
+ADD ./postfix_filter.py /srv/gesasso_mkmail/
