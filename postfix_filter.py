@@ -1,28 +1,33 @@
 #!/usr/bin/python3
-import base64
-import email
-import logging
-import os
-import quopri
-import re
-import sys
-import syslog
-import time
-from subprocess import Popen, PIPE
+try:
+    import base64
+    import email
+    import logging
+    import os
+    import quopri
+    import re
+    import sys
+    import syslog
+    import time
+    from subprocess import Popen, PIPE
 
-import jwt
-import requests
-from bs4 import BeautifulSoup
-from dotenv import load_dotenv
+    import jwt
+    import requests
+    from bs4 import BeautifulSoup
+    from dotenv import load_dotenv
 
-load_dotenv()
+    load_dotenv()
 
-logging.basicConfig(
-    level=logging.DEBUG,
-    format="%(asctime)s %(levelname)s %(message)s",
-    filename="/tmp/gesasso-mkmail-filter.log",
-    filemode="a",
-)
+    logging.basicConfig(
+        level=logging.DEBUG,
+        format="%(asctime)s %(levelname)s %(message)s",
+        filename="/tmp/gesasso-mkmail-filter.log",
+        filemode="a",
+    )
+except Exception as e:
+    syslog.syslog(syslog.LOG_ERR, str(e))
+    print(str(e), file=sys.stderr)
+    sys.exit(75)  # EX_TEMPFAIL
 
 
 def reinjectMail(mail):
@@ -44,15 +49,19 @@ def extractMultipartPayload(mail):
     ret = {"text": "", "attachements": []}
     if mail.is_multipart():
         for payload in mail.get_payload():
-            ret["text"] += extractMultipartPayload(payload)["text"]
-            ret["attachements"].append(extractMultipartPayload(payload)["attachements"])
+            extracted = extractMultipartPayload(payload)
+            ret["text"] += extracted["text"]
+            ret["attachements"].extend(extracted["attachements"])
     elif mail.get_content_type() in ["text/plain", "text/html"]:
         content = mail.get_payload(decode=True).decode("utf-8", errors="replace")
-        # if mail.get_content_type() == "text/html":
-        #     content = BeautifulSoup(content, features="html.parser").decompose()
         ret["text"] += content
     else:
-        ret["attachements"].append(mail.get_payload(decode=True))
+        attachement = {
+            "name": mail.get_filename(),
+            "content": mail.get_payload(),
+            "type": mail.get_content_type(),
+        }
+        ret["attachements"].append(attachement)
     return ret
 
 
@@ -94,7 +103,7 @@ def main():
                 mail_subject,
             )
         )
-        if is_simde_email(mail_to):
+        if is_simde_email(mail_to) and not mail_from.startswith("gesasso"):
             body = extractMultipartPayload(b)
             encoded = jwt.encode(
                 payload={
@@ -107,7 +116,7 @@ def main():
                     "body": BeautifulSoup(
                         body["text"], features="html.parser"
                     ).get_text(),
-                    # "attachements": body["attachements"],
+                    "attachements": body["attachements"],
                 },
                 key=os.environ.get("PRIVATE_KEY"),
                 algorithm="RS256",
